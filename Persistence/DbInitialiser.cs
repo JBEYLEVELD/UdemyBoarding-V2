@@ -1,14 +1,31 @@
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence;
 
-    public class DbInitialiser
+public class DbInitialiser
+{
+    public static async Task SeedData(AppDbContext context, UserManager<User> userManager)
     {
-        public static async Task SeedData(AppDbContext context)
-        {
-            if (context.Activities.Any()) return;
 
-            var activities = new List <Activity>
+        if (!userManager.Users.Any())
+        {
+            var users = new List<User>
+                {
+                    new() {DisplayName = "Bob", UserName = "bob@test.com", Email= "bob@test.com" },
+                    new() {DisplayName = "Tom", UserName = "tom@test.com", Email= "tom@test.com" },
+                    new() {DisplayName = "Jane", UserName = "jane@test.com", Email= "jane@test.com" }
+                };
+
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                }
+            }
+
+        if (context.Activities.Any()) return;
+
+        var activities = new List<Activity>
             {
                 new() {
                 Title = "Past Activity 1",
@@ -118,8 +135,8 @@ namespace Persistence;
             }
             };
 
-            context.Activities.AddRange(activities);
+        context.Activities.AddRange(activities);
 
-            await context.SaveChangesAsync();
-        }
+        await context.SaveChangesAsync();
     }
+}
