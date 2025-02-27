@@ -9,7 +9,7 @@ type Activity = {
     venue: string
     latitude: number
     longitude: number
-    attendees: Profile []
+    attendees: Profile[]
     isGoing: boolean
     isHost: boolean
     hostId: string
@@ -22,6 +22,9 @@ type Profile = {
     displayName: string
     bio?: string
     imageUrl?: string
+    followersCount?: number
+    followingCount?: number
+    following?: boolean
 }
 
 type Photo = {
